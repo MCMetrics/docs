@@ -1,0 +1,106 @@
+export const description =
+  'Experiments Tool'
+
+# Experiments
+Experiments, or A/B tests, allow you to test different variants of a feature or game mechanic to see which one performs better. This is a powerful tool for growing your server, as just a 5% increase in retention or revenue resulting from A/B testing can be highly valuable. The Experiments tool makes it easy to create, manage, and analyze your experiments.
+
+## Creating an Experiment
+To create an experiment, click "Add new" on the Experiments page. The following fields are required:
+- **Name**: The name of the experiment.
+- **Server**: The server that the experiment will run on. Experiments can only run on one server to ensure that the results are not skewed.
+- **Trigger**: The trigger that will start the experiment. This can be automatic, including user joins, first joins, and payments, or manual, including commands and PAPI placeholders.
+- **Options**: Currently, the only option is whether users should always see the same variant.
+- **Variant List**: Here, you can add variants to your experiment.
+
+## Variants
+A variant has the following properties:
+- **ID**: The ID of the variant (automatically generated). This is used internally and for manual triggers.
+- **Name**: The name of the variant. Make this descriptive so that you can easily identify which variant is which later on.
+- **Probability**: The probability that a user will be assigned to this variant. The sum of all probabilities must be 100%.
+- **Type**: The action type that will be performed if this variant is selected.
+- **Value**: The value of the action. For example, if the action type is a command, the value would be the command that will be run.
+
+## Actions
+The following action types are available:
+- **Control**: Does nothing.
+- **Console Command**: Runs a command as the console.
+- **Player Command**: Runs a command as the player.
+- **Chat Message**: Sends a chat message to the player. Supports color codes.
+
+## Available Placeholders
+The following placeholders can be used in action values:
+- **`%player%`**: The player's username.
+- **`%uuid%`**: The player's UUID.
+- **`%variant%`**: The variant ID.
+- **`%experimentName%`**: The experiment name.
+
+## Manual Triggers
+Experiments with the `Command` or `Placeholder` trigger are manually triggered, usually by an external plugin.
+Through the use of manual triggers, virtually any feature, gameplay mechanic, or other aspect of your server can be A/B tested.
+
+### Commands
+Note: When using commands, experiment names cannot contain spaces.
+
+The `mcmexperiment <experiment name> <player name>` console command. This command will manually trigger an experiment for a player.
+
+### Placeholders
+Experiments can also be triggered through the use of [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) placeholders.
+
+The placeholder format is `%mcm_[experiment name]%`. When executed, the following will happen:
+1. The plugin will select a variant for the player and perform the action.
+2. The placeholder will return the ID of the selected variant
+3. The player's session will be linked to the variant (as if they were assigned to it through the automatic trigger)
+
+Note: If the experiment does not exist, the placeholder will return `null`. If the trigger of the experiment is not `Placeholder`, the placeholder will return `ERR_PROVIDED_EXPERIMENT_NOT_PAPI_TRIGGERED`.
+
+## Behind the Scenes: Consistent Variant Option
+If the `Users should always receive the same variant (strongly recommended)` option is enabled, the plugin will use a simple algorithm to ensure that the same users will always get the same variant.
+
+To make this work, when an experiment with the option is created, the browser client will generate a `variantsRandomlyOrdered` value. This is an integer in the database, such as:
+```
+312
+```
+
+Each number here - `3`, `1`, and `2` - is a variant ID. The order of the numbers is random, but consistent for the same experiment.
+
+When an A/B test with consistent variants is executed, the server generates a random double between 0 and 100 based on the UUID - this is always the same for the same UUID:
+```java
+/**
+     * Generates a random number between 0 and 100 inclusive based on the given UUID.
+     * The output is random, but consistent for the same UUID.
+     * @param uuid The UUID of the player
+     * @return A random number between 0 and 100 inclusive
+     */
+    public static double getProbabilityFromUuid(String uuid) {
+        String firstTwoChars = uuid.substring(0, 2);
+
+        return ((double) combinations.indexOf(firstTwoChars) % 100) / 100;
+    }
+```
+
+The server then creates a list of all variants including their probability, ordered by the order provided in variantsRandomlyOrdered. For example, if there are 3 variants:
+- **Variant 1**: 20% chance
+- **Variant 2**: 50% chance
+- **Variant 3**: 30% chance
+
+...and the random order is 312, then they will be ordered like this:
+```
+| 3 - 0.3 | 1 - 0.2 | 2 - 0.5 |
+```
+
+The plugin then loops through these variants using the random double generated from the UUID -- for example, with a randon number of 0.4, variant 1 will be chosen.
+
+This algorithm the advantage that variants are still completely randomly chosen (because UUIDs are random), but still the same for each UUID.
+
+## Experiment Results
+You can view the results of your experiments at any time from the Experiments page by clicking the "View" button.
+
+This will show you each variant with its corresponding name, probability, and the number of sessions that were assigned to it.
+
+More importantly, it will show you a separate table showing the following metrics for each variant:
+- Average Retention
+- 5min/1d/7d Retention
+- Revenue generated
+- Average revenue per user
+
+These metrics are incredibly useful for determining which variant is the best. For example, if you are testing a new feature, you can add multiple variants and see which one has the highest retention. If you are testing a new pricing model, you can see which one generates the most revenue.

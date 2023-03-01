@@ -1,0 +1,36 @@
+import { Concepts } from '@/components/Concepts'
+import { QuickLinks } from '@/components/QuickLinks'
+import { HeroPattern } from '@/components/HeroPattern'
+
+export const description =
+  `
+  Welcome to the MCMetrics docs! Here, you can find information about setting
+up MCMetrics for your project, how to use and understand dashboard analytics,
+and more!
+  `;
+
+export const sections = [
+  { title: 'Concepts', id: 'concepts' },
+  { title: 'Quick Links', id: 'quicklinks' }]
+
+[//]: # ({ title: 'Resources', id: 'quicklinks' },)
+
+[//]: # (<HeroPattern />)
+
+# MCMetrics Docs
+
+Welcome to the MCMetrics docs! Here, you can find information about setting
+up MCMetrics for your project, how to use and understand dashboard analytics,
+and more!
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+  <Button href="/quickstart" arrow="right" children="5 Minute Installation" />
+  <Button href="https://dashboard.mcmetrics.net" target="_blank"
+          rel="noreferrer"
+          variant="outline"
+          children="Go To Dashboard" />
+</div>
+
+<Concepts />
+
+<QuickLinks />

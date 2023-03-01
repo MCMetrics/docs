@@ -1,0 +1,38 @@
+import {Code} from "@/components/Code"; import {
+    Libraries
+} from "@/components/Libraries";
+export const description =
+  'Set up MCMetrics on a proxy with multiple servers. MCMetrics currently supports Velocity and Bungeecord/Waterfall proxies.'
+
+# Proxy Setup
+Set up MCMetrics on a proxy with multiple servers. MCMetrics currently
+supports Velocity and Bungeecord/Waterfall proxies.
+
+## Create a Project
+First, [create a new project](https://dashboard.mcmetrics.net/project/new).
+When given the option to create a server, select Velocity orBungeecord/Waterfall.
+You will need to set up your backend servers later from the settings page.
+
+Once you created the proxy server, click "Next" and download the plugin. Install it on your proxy and reboot.
+
+## Add backend servers
+At this point, you should have a proxy server with the MCMetrics plugin installed.
+
+Next, navigate to the "Servers" tab in settings. For each backend server, you should do the following:
+1. Add a server using the "Add Server" button.
+2. Install the MCMetrics spigot plugin on the backend server.
+3. Restart the backend server.
+4. On the dashboard, click "Edit Server" and copy the `/mcmetrics setup` command. Run the command on the backend server.
+
+## Revenue Tracking Setup
+To set up revenue tracking, you need to set up the `mcmpayment` command for each backend server.
+- Do not add any payment tracking to the proxy server.
+- When adding the payment commands on Tebex or CraftingStore, make sure each command only executes on one server.
+For example, if you have a package "1x Crate Key" that applies to a server called "Survival", you should run the `mcmpayment` command only on the Survival server.
+- If you have packages that apply to multiple servers (such as ranks), we suggest you execute the `mcmpayment` command on a hub or limbo server.
+
+## Finish Setup
+Whenever the server reboots or the plugin is reloaded, the plugin sends an API call to MCMetrics to get a list of tasks for the server to run (such as tracking player sessions and payments).
+This is how the plugins communicate with each other to prevent duplicate data.
+
+To make sure this works properly, run `/mcmetrics reload` on the proxy and every backend server once all servers are set up.

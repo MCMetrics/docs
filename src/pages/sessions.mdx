@@ -1,0 +1,18 @@
+export const description =
+  'User Session Metrics'
+
+# User Sessions
+
+Explanation of every metric in the User Sessions section.
+
+- **Mean Session Length:** The average length of a user session.
+- **P25/P50/P75 Session Length:** The 25th, 50th, and 75th percentile of session lengths.
+For example, if the P50 Session Length is 10 minutes, 50% of sessions are 10 minutes or less.
+The 50th percentile is also known as the median.
+- **Session Count Distribution Chart:** A bar chart showing the distribution of sessions by server.
+- **Session Length Distribution Chart:** A bar chart showing the distribution of session lengths by server.
+
+## Session Count vs. Session Length
+When comparing the two charts, if you notice that some servers have higher session counts than others but lower session lengths,
+this is an indicator that those servers have lower player retention. It can be useful to compare the two servers with retention in mind
+to figure out how to maximize retention on all of your servers.

@@ -1,0 +1,41 @@
+import {Code} from "@/components/Code"; import {
+    Libraries
+} from "@/components/Libraries";
+export const description =
+  'Set up MCMetrics to start collecting data within 5 minutes.'
+
+# Quickstart
+Set up MCMetrics to start collecting data within 5 minutes.
+
+## Create a Project
+To get started, [create a new project](https://dashboard.mcmetrics.net/project/new). Add a name and optionally a description.
+
+## Add a Server
+To add a server, enter a name and select a server type. Valid server types are:
+- Spigot: Supports [Spigot](https://spigotmc.org/) servers (including paper and other forks)
+- Velocity: Supports [Velocity](https://velocitypowered.com/) proxies.
+- Bungee Supports [Bungeecord](https://www.spigotmc.org/go/bungeecord) proxies.
+
+Proxy setups require at least one spigot server in order to track sessions.
+Read more [here](/proxy-setup)
+
+## Plugin Setup
+In the next step, you will get a plugin download link for the server type that you selected. Alternatively, you can download them here:
+- [Spigot Download](/jars/mcm-spigot-1.0.0.jar)
+- [Velocity Download](https://google.com) Not yet available
+- [Bungeecord Download](https://google.com) Not yet available
+
+The plugins are also [open-source](https://github.com/MCMetrics) and can
+also be
+compiled manually.
+
+Add the `.JAR` file to your `/plugins` directory and restart the server. Once restarted, execute the `/mcmetrics setup` command provided in the setup step to automatically connect your server. Once completed, user sessions will automatically be tracked and uploaded.
+
+## Revenue Tracking Setup
+Optionally, you can set up revenue tracking to automatically track payments
+made on your store. If you decide not to set up revenue tracking, you can still 
+
+Revenue tracking works by executing plugin commands with payment information whenever a payment is completed.
+
+- Tebex Setup: Add the following global command to each server: `mcmpayment tebex {id} {transaction} {price} {currency} {packageId}`
+- CraftingStore Setup: Add the following global command to each server: `mcmpayment craftingstore {uuid} {transaction_id} {amount} USD {packages}`. CraftingStore currently doesn't have a placeholder for currency.
