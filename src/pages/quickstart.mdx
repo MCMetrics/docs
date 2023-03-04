@@ -37,5 +37,18 @@ made on your store. If you decide not to set up revenue tracking, you can still
 
 Revenue tracking works by executing plugin commands with payment information whenever a payment is completed.
 
-- Tebex Setup: Add the following global command to each server: `mcmpayment tebex {id} {transaction} {price} {currency} {packageId}`
-- CraftingStore Setup: Add the following global command to each server: `mcmpayment craftingstore {uuid} {transaction_id} {amount} USD {packages}`. CraftingStore currently doesn't have a placeholder for currency.
+### Tebex Setup
+1. Navigate to https://server.tebex.io/game-servers
+2. For each server/gamemode you have, add the following Global Server Game Command: `mcmpayment tebex {id} {transaction} {price} {currency} {packageId}`
+3. Click the Settings icon next to the command to edit the command options:
+4. Set "Game Server to Execute on" to the server that command should execute on. Each command should execute on exactly one server.
+5. Set "Execution Rule" to "Execute once per payment and not per package"
+
+### CraftingStore Setup
+1. Navigate to https://dash.craftingstore.net/admin/commands
+2. For each server/gamemode you have, click "Create Command" with the following options:
+- Command Type: `Initial`
+- Server: Select the server that command should execute on. Each command should execute on exactly one server.
+- Require player to be online: False
+- Only execute when price is above: Leave blank
+- Enter command: `mcmpayment craftingstore {uuid} {transaction_id} {amount} USD {packages}`
