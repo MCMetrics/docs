@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: 'https://mcmetrics.net',
+    siteUrl: 'https://docs.mcmetrics.net',
     generateRobotsTxt: true, // (optional)
     // ...other options
 }
